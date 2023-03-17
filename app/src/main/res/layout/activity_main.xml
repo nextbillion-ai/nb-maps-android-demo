@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ai.nextbillion.maps.core.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:nbmap_cameraTargetLat="53.550813508267716"
+        app:nbmap_cameraTargetLng="9.992248999933745"
+        app:nbmap_cameraZoom="10" />
+
+    <ImageView
+        android:id="@+id/back_ib"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/circle_white_bg"
+        android:src="@drawable/icon_back"
+        app:tint="@color/color_back_icon"/>
+
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_leftActionMode="showSearch"
+        app:floatingSearch_searchBarMarginLeft="55dp"
+        app:floatingSearch_menu="@menu/simple_map_menu_matrix"
+        app:floatingSearch_searchBarMarginRight="16dp"
+        app:floatingSearch_searchBarMarginTop="20dp"
+        app:floatingSearch_searchHint="Search here"
+        app:floatingSearch_showSearchKey="true"
+        app:floatingSearch_suggestionsListAnimDuration="250" />
+
+    <ImageView
+        android:id="@+id/trackLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/circle_white_bg"
+        android:src="@drawable/icon_location_searching"
+        android:elevation="10dp"/>
+
+    <ai.nextbillion.dialog.LogoPickerDialog
+        android:id="@+id/logo_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

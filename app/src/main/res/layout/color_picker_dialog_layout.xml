@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="@drawable/dialog_overlay_bg"
+    android:layout_height="wrap_content"
+    tools:context=".dialog.ColorPickerDialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/colorPickerViewFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.skydoves.colorpickerview.ColorPickerView
+                android:id="@+id/colorPickerView"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                app:selector="@drawable/wheel" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/alphaSlideBarFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.skydoves.colorpickerview.sliders.AlphaSlideBar
+                android:id="@+id/alphaSlideBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="10dp"
+                app:borderSize_AlphaSlideBar="5"
+                app:selector_AlphaSlideBar="@drawable/wheel" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/brightnessSlideBarFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+                android:id="@+id/brightnessSlideBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="10dp"
+                app:selector_BrightnessSlider="@drawable/wheel" />
+        </FrameLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:paddingRight="30dp"
+           android:paddingBottom="5dp"
+           android:orientation="horizontal">
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="30dp"
+               android:gravity="center"
+               android:orientation="vertical">
+
+               <com.skydoves.colorpickerview.AlphaTileView
+                   android:id="@+id/alphaTileView"
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:background="@android:color/white"
+                   android:orientation="horizontal"
+                   app:tileSize="20" />
+
+               <TextView
+                   android:id="@+id/color_value"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="#ffffff"
+                   android:layout_marginTop="5dp"
+                   android:textColor="@color/white"
+                   android:textSize="12sp"
+                   android:textStyle="bold" />
+
+           </LinearLayout>
+
+           <Space
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="1dp"/>
+
+           <TextView
+               android:id="@+id/cancel_btn"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textColor="@color/colorAccent"
+               android:textSize="18sp"
+               android:layout_gravity="bottom"
+               android:padding="10dp"
+               android:textStyle="bold"
+               android:text="Cancel"/>
+
+
+           <TextView
+               android:id="@+id/select_btn"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="bottom"
+               android:textColor="@color/colorAccent"
+               android:textSize="18sp"
+               android:layout_marginLeft="10dp"
+               android:padding="10dp"
+               android:textStyle="bold"
+               android:text="Select"/>
+
+       </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

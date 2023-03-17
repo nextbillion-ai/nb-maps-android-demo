@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/logo_bg"
+    android:layout_width="66dp"
+    android:layout_height="66dp"
+    android:layout_marginRight="16dp"
+    android:padding="8dp"
+    android:state_enabled="false"
+    android:gravity="center"
+    android:background="@drawable/un_selected_rounded_corner_box"
+    android:layout_marginEnd="16dp">
+
+    <ImageView
+        android:id="@+id/logo_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/map_log_1"/>
+
+</RelativeLayout>

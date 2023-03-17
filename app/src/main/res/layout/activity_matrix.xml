@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ai.nextbillion.maps.core.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:nbmap_cameraTargetLat="12.94296335"
+        app:nbmap_cameraTargetLng="77.60676039"
+        app:nbmap_cameraZoom="12" />
+
+    <LinearLayout
+        android:id="@+id/matrix_view"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/time_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textIsSelectable="false"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/distance_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:alpha="0.56"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textIsSelectable="false"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PolygonActivity">
+
+    <ai.nextbillion.maps.core.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:nbmap_cameraTargetLat="53.5493093866953"
+        app:nbmap_cameraTargetLng="10.031835837897463"
+        app:nbmap_cameraZoom="10"
+        app:nbmap_uiAttribution="false" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="68dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="13dp"
+                android:background="@drawable/nbmap_radius_10_grey_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:paddingHorizontal="16dp"
+                android:text="@string/polygonSetting"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <ai.nextbillion.view.SettingSwitchView
+                android:id="@+id/pointEnable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+
+            <ai.nextbillion.view.ColorSelectorView
+                android:id="@+id/polygon_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+            <ai.nextbillion.view.ColorSelectorView
+                android:id="@+id/polygon_stroke_Color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+            <ai.nextbillion.view.SliderBarView
+                android:id="@+id/lineWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fb_clean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="16dp"
+        android:backgroundTint="@color/purple_200"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:tooltipText="Clean"
+        app:fabSize="mini" />
+
+    <TextView
+        android:id="@+id/fb_check"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="170dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/shape_circle_40_md_grey_400"
+        android:gravity="center"
+        android:text="@string/polygonStrokeCheck" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fb_expand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="56dp"
+        android:backgroundTint="@color/purple_200"
+        android:src="@android:drawable/ic_dialog_info"
+        android:tooltipText="Create"
+        android:visibility="gone"
+        app:fabSize="mini" />
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/circle_white_bg"
+        android:src="@drawable/icon_back"
+        app:tint="@color/color_back_icon" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

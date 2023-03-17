@@ -1,0 +1,56 @@
+<resources>
+    <string name="nexbillion_ai_api_key">your API Key</string>
+
+    <string name="app_name">NB.AI Maps Demo</string>
+
+    <string name="marker">Marker Demo</string>
+    <string name="api_client">APIClient Demo</string>
+    <string name="info_window">Customised Info Window Demo</string>
+    <string name="polyline">Polyline Demo</string>
+    <string name="polygon">Polygon Demo</string>
+    <string name="bounds">Bounds Demo</string>
+    <string name="simple_map">Simple Maps</string>
+    <string name="directions">Directions Demo</string>
+    <string name="matching">Snap to Roads Demo</string>
+    <string name="distance_matrix">DistanceMatrix Demo</string>
+    <string name="snapshot">Snapshot Demo</string>
+    <string name="animate_marker">Animate multiple Markers Demo</string>
+    <string name="animate_route">Animate along route Demo</string>
+
+    <string name="marker_desc">Marker Demo</string>
+    <string name="api_client_desc">API Client Demo</string>
+    <string name="info_window_desc">InfoWindows with customised background colors</string>
+    <string name="polyline_desc">Polyline Demo</string>
+    <string name="polygon_desc">Polygon Demo</string>
+    <string name="bounds_desc">Bounds Demo</string>
+    <string name="simple_map_desc">Simple Maps</string>
+    <string name="directions_desc">Directions Demo</string>
+    <string name="matching_desc">Snap to Roads Demo</string>
+    <string name="distance_matrix_desc">DistanceMatrix Demo</string>
+    <string name="snapshot_desc">Snapshot Demo</string>
+    <string name="animate_marker_desc">Animate multiple markers by using ValueAnimator</string>
+    <string name="animate_route_desc">Animate alone a route</string>
+    <string name="polyLine">Polyline</string>
+    <string name="lineColor">Line color</string>
+    <string name="lineWidth">Line width</string>
+    <string name="remove_single_line">Remove\nsingle point</string>
+    <string name="remove_all_line">Remove\nall point</string>
+    <string name="snack_long_press">Long press to generate a poly line</string>
+    <string name="polygon_cluster_desc">Show marker cluster</string>
+    <string name="polygon_cluster">Show marker cluster demo</string>
+    <string name="description_heat_map_layer">Use HeatmapLayer to visualise earthquakes</string>
+    <string name="activity_heat_map_layer">Heatmap layer</string>
+
+    <string name="polygonSetting">Polygon setting</string>
+    <string name="polygonColor">Polygon color</string>
+    <string name="polygonStrokeColor">Polygon Stroke color</string>
+    <string name="polygonStrokeWidth">Polygon Stroke width</string>
+    <string name="polygonStrokeCheck">P</string>
+    <string name="polygin_visibility_notice">The polygon is in visible region</string>
+    <string name="polygon_invisibility_notice">The polygon is not in visible region</string>
+    <string name="waite_notice">Please waite</string>
+    <string name="polygon_empty_point_notice">please long click map to add polygon point</string>
+    <string name="search_empty_notice">We couldn\'t find any matches, try another search?</string>
+    <string name="polygon_point_show">Show polygon vertex</string>
+
+</resources>
