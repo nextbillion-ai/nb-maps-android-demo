@@ -29,8 +29,6 @@ import ai.nextbillion.geocoding.rest.SearchResponse;
 import ai.nextbillion.gestures.MoveGestureDetector;
 import ai.nextbillion.maps.annotations.Marker;
 import ai.nextbillion.maps.annotations.MarkerOptions;
-import ai.nextbillion.maps.camera.CameraUpdate;
-import ai.nextbillion.maps.camera.CameraUpdateFactory;
 import ai.nextbillion.maps.core.MapView;
 import ai.nextbillion.maps.core.NextbillionMap;
 import ai.nextbillion.maps.core.OnMapReadyCallback;
@@ -38,25 +36,26 @@ import ai.nextbillion.maps.core.Style;
 import ai.nextbillion.maps.geometry.LatLng;
 import ai.nextbillion.maps.location.LocationComponent;
 import ai.nextbillion.maps.location.LocationComponentActivationOptions;
+import ai.nextbillion.maps.location.LocationComponentOptions;
+import ai.nextbillion.maps.location.OnCameraTrackingChangedListener;
 import ai.nextbillion.maps.location.engine.LocationEngine;
 import ai.nextbillion.maps.location.engine.LocationEngineCallback;
 import ai.nextbillion.maps.location.engine.LocationEngineProvider;
 import ai.nextbillion.maps.location.engine.LocationEngineRequest;
 import ai.nextbillion.maps.location.engine.LocationEngineResult;
+import ai.nextbillion.maps.location.modes.CameraMode;
 import ai.nextbillion.maps.location.modes.RenderMode;
 import ai.nextbillion.maps.location.permissions.PermissionsListener;
 import ai.nextbillion.maps.location.permissions.PermissionsManager;
 import ai.nextbillion.service.GeoCodingRequest;
 import ai.nextbillion.utils.CameraAnimateUtils;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NextbillionMap.OnMapClickListener, LocationEngineCallback<LocationEngineResult>, NextbillionMap.OnMoveListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NextbillionMap.OnMapClickListener, LocationEngineCallback<LocationEngineResult>, NextbillionMap.OnMoveListener, OnCameraTrackingChangedListener {
 
     private MapView mapView;
     private LogoPickerDialog logoPickerDialog;
@@ -70,9 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean touchEnable = true;
     private LocationEngine locationEngine;
     private ImageView mActionButton;
-    private boolean trackLocationManual = false;
     private BottomSheetBehavior logoViewBehavior;
-    private boolean trackLocationAuto = true;
     private Location currentLocation;
     private FloatingSearchView searchView;
 
@@ -248,10 +245,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void trackMyCurrentLocation() {
-        if (locationEngine != null) {
-            trackLocationManual = true;
-            locationEngine.getLastLocation(MainActivity.this);
+        if (locationComponent == null) {
+            return;
         }
+        mActionButton.setImageResource(R.drawable.ic_my_location);
+        locationComponent.setCameraMode(CameraMode.TRACKING);
     }
 
     @Override
@@ -428,6 +426,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (locationEngine != null) {
+            locationEngine.removeLocationUpdates(this);
+        }
         mapView.onDestroy();
     }
 
@@ -450,12 +451,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationComponent.activateLocationComponent(
                 LocationComponentActivationOptions
                         .builder(this, style)
+                        .locationComponentOptions(
+                                LocationComponentOptions.builder(this).pulseEnabled(true)
+                                        .build())
                         .locationEngine(locationEngine)
                         .locationEngineRequest(request)
                         .build());
 
+        // Enable Tracking Location Component
         locationComponent.setLocationComponentEnabled(true);
         locationComponent.setRenderMode(RenderMode.NORMAL);
+        locationComponent.setCameraMode(CameraMode.TRACKING);
+        locationComponent.addOnCameraTrackingChangedListener(this);
+        mActionButton.setImageResource(R.drawable.ic_my_location);
+
         locationEngine.requestLocationUpdates(request, this, null);
         locationEngine.getLastLocation(this);
     }
@@ -496,14 +505,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         currentLocation = locationEngineResult.getLastLocation();
-        if (trackLocationAuto || trackLocationManual) {
-            mActionButton.setImageResource(R.drawable.ic_my_location);
-            trackLocationManual = false;
-            trackLocationAuto = true;
-            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
-            nextbillionMap.animateCamera(cameraUpdate);
-        }
     }
 
     @Override
@@ -517,8 +518,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void onMapMoveBegin() {
-        trackLocationAuto = false;
-        mActionButton.setImageResource(R.drawable.icon_location_searching);
     }
 
     @Override
@@ -527,6 +526,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
+
+    }
+
+    @Override
+    public void onCameraTrackingDismissed() {
+        mActionButton.setImageResource(R.drawable.icon_location_searching);
+    }
+
+    @Override
+    public void onCameraTrackingChanged(int i) {
 
     }
 }

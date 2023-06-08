@@ -36,7 +36,7 @@ import static ai.nextbillion.maps.style.layers.PropertyFactory.iconIgnorePlaceme
 import static ai.nextbillion.maps.style.layers.PropertyFactory.iconImage;
 import static ai.nextbillion.maps.style.layers.PropertyFactory.iconRotate;
 
-public class AnimateMarkersActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AnimateSymbolsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAXI = "taxi";
     private static final String TAXI_LAYER = "taxi-layer";
     private static final String TAXI_SOURCE = "taxi-source";
@@ -70,7 +70,7 @@ public class AnimateMarkersActivity extends AppCompatActivity implements OnMapRe
         nextbillionMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                AnimateMarkersActivity.this.style = style;
+                AnimateSymbolsActivity.this.style = style;
                 generateTaxis();
                 animateTaxis();
             }

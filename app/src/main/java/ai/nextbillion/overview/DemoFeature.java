@@ -1,57 +1,69 @@
 package ai.nextbillion.overview;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import androidx.annotation.StringRes;
+public class DemoFeature implements Parcelable {
 
-import java.util.ArrayList;
-import java.util.List;
+    private final String name;
+    private final String label;
+    private final String description;
+    private final String category;
 
-public class DemoFeature {
-    public DemoFeature(String name, String label, String desc) {
+    public DemoFeature(String name, String label, String description, String category) {
         this.name = name;
         this.label = label;
-        this.desc = desc;
+        this.description = description;
+        this.category = category;
     }
 
-    String name;
-    String label;
-    String desc;
-
-    public void launchFeature(Context context) {
-        Intent featureIntent = new Intent();
-        featureIntent.setComponent(new ComponentName(context.getPackageName(), name));
-        context.startActivity(featureIntent);
+    private DemoFeature(Parcel in) {
+        name = in.readString();
+        label = in.readString();
+        description = in.readString();
+        category = in.readString();
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
+    public String getName() {
+        return name;
+    }
 
-    public static List<DemoFeature> loadFeatures(Context context) throws PackageManager.NameNotFoundException {
-        PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                PackageManager.GET_ACTIVITIES | PackageManager.GET_META_DATA);
-        List<DemoFeature> features = new ArrayList<>();
-        String packageName = context.getPackageName();
-        for (ActivityInfo info : packageInfo.activities) {
-            if (info.labelRes != 0 && info.enabled) {
-                features.add(new DemoFeature(info.name, context.getString(info.labelRes), resolveString(info.descriptionRes, context)));
-            }
+    public String getSimpleName() {
+        String[] split = name.split("\\.");
+        return split[split.length - 1];
+    }
+
+    public String getLabel() {
+        return label != null ? label : getSimpleName();
+    }
+
+    public String getDescription() {
+        return description != null ? description : "-";
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeString(label);
+        out.writeString(description);
+        out.writeString(category);
+    }
+
+    public static final Creator<DemoFeature> CREATOR
+            = new Creator<DemoFeature>() {
+        public DemoFeature createFromParcel(Parcel in) {
+            return new DemoFeature(in);
         }
-        return features;
-    }
 
-    private static String resolveString(@StringRes int stringRes, Context context) {
-        try {
-            return context.getString(stringRes);
-        } catch (Resources.NotFoundException exception) {
-            return "-";
+        public DemoFeature[] newArray(int size) {
+            return new DemoFeature[size];
         }
-    }
+    };
 }

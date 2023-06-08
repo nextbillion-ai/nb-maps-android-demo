@@ -1,5 +1,5 @@
 <resources>
-    <string name="nexbillion_ai_api_key">your API Key</string>
+    <string name="nbmap_access_key">Your API Key</string>
 
     <string name="app_name">NB.AI Maps Demo</string>
 
@@ -16,6 +16,15 @@
     <string name="snapshot">Snapshot Demo</string>
     <string name="animate_marker">Animate multiple Markers Demo</string>
     <string name="animate_route">Animate along route Demo</string>
+    <string name="activity_animate_source">Animate Image Source</string>
+    <string name="activity_location_puck_pulsing">Custom Location Pulsing</string>
+    <string name="activity_basic_location_tracking">Basic Location Tracking</string>
+    <string name="activity_custom_map_style">Custom Map Style</string>
+    <string name="activity_custom_location_puck_icon">Custom Location Puck</string>
+    <string name="activity_location_modes">Location Modes</string>
+    <string name="activity_gesture_detector">Gesture Detector on MapView</string>
+    <string name="activity_camera_method">Camera Position Methods</string>
+    <string name="activity_query_feature_symbol">Query Rendered Features And Symbols</string>
 
     <string name="marker_desc">Marker Demo</string>
     <string name="api_client_desc">API Client Demo</string>
@@ -40,6 +49,19 @@
     <string name="polygon_cluster">Show marker cluster demo</string>
     <string name="description_heat_map_layer">Use HeatmapLayer to visualise earthquakes</string>
     <string name="activity_heat_map_layer">Heatmap layer</string>
+    <string name="activity_animate_source_des">Use image source to create an animation</string>
+    <string name="activity_location_puck_pulsing_des">Custom Location Pulsing</string>
+    <string name="activity_basic_location_tracking_des">Tracking Current Location manually</string>
+    <string name="activity_custom_map_style_des">Switch Runtime Map Style</string>
+    <string name="activity_custom_location_puck_icon_des">Custom Location Puck Icon Style</string>
+    <string name="activity_location_modes_des">Switch Location Modes</string>
+    <string name="activity_simple_map_view">Simple Map View</string>
+    <string name="activity_simple_map_view_des">A Simple Map View without complex functions</string>
+    <string name="activity_custom_map_view">Customize Map View</string>
+    <string name="activity_custom_map_view_des">Map View with customized camera and UI setting</string>
+    <string name="activity_gesture_detector_des">Operations to uiSettings gesture</string>
+    <string name="activity_camera_method_des">Camera Position Methods</string>
+    <string name="activity_query_feature_symbol_des">Query Rendered Features And Symbols in box</string>
 
     <string name="polygonSetting">Polygon setting</string>
     <string name="polygonColor">Polygon color</string>
@@ -52,5 +74,30 @@
     <string name="polygon_empty_point_notice">please long click map to add polygon point</string>
     <string name="search_empty_notice">We couldn\'t find any matches, try another search?</string>
     <string name="polygon_point_show">Show polygon vertex</string>
+    <string name="dialog_camera_position">Animate to new position</string>
+    <string name="latitude">Latitude</string>
+    <string name="min_value">-180</string>
+    <string name="longitude">Longitude</string>
+    <string name="zoom">Zoom</string>
+    <string name="default_zoom_value">18</string>
+    <string name="bearing">Bearing</string>
+    <string name="default_tilt_value">0</string>
+    <string name="tilt">Tilt</string>
+
+    <string name="list_all_layers_in_the_style">List all layers in the style</string>
+    <string name="list_all_sources_in_the_style">List all sources in the style</string>
+    <string name="color_the_water">Color the water</string>
+    <string name="set_background_opacity">Set background opacity</string>
+    <string name="set_layer_visibility_to_false">Set layer visibility to false</string>
+    <string name="change_the_water_color_on_zoom">Change the water color on zoom</string>
+    <string name="bring_water_to_front">Bring water to front</string>
+
+    <string name="category">category</string>
+    <string name="category_features">Features</string>
+    <string name="category_basic">Basic</string>
+    <string name="category_location">Location</string>
+    <string name="category_annotation">Annotation</string>
+    <string name="category_camera">Camera</string>
+    <string name="category_style">Style</string>
 
 </resources>

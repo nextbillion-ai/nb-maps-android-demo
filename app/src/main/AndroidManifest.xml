@@ -3,6 +3,7 @@
     package="ai.nextbillion">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".DemoApplication"
@@ -14,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NBMapsDemoApp.NoActionBar">
         <activity android:name=".overview.OverviewActivity"
-            android:theme="@style/Theme.NBMapsDemoApp.NoActionBar">
+            android:theme="@style/Theme.NBMapsDemoApp.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,18 +24,156 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:description="@string/simple_map_desc"
-            android:label="@string/simple_map">
+            android:name=".QueryFeatureAndSymbolActivity"
+            android:exported="true"
+            android:description="@string/activity_query_feature_symbol_des"
+            android:label="@string/activity_query_feature_symbol">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_features" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
         <activity
-            android:name=".MarkerActivity"
-            android:enabled="false"
+            android:name=".RuntimeStyleActivity"
+            android:enabled="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".GestureDetectorActivity"
+            android:description="@string/activity_gesture_detector_des"
+            android:label="@string/activity_gesture_detector"
+            android:theme="@style/Theme.NBMapsDemoApp.ActionBar">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_camera" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".CameraPositionActivity"
+            android:description="@string/activity_camera_method_des"
+            android:label="@string/activity_camera_method"
+            android:theme="@style/Theme.NBMapsDemoApp.ActionBar">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_camera" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".SimpleMapViewActivity"
+            android:description="@string/activity_simple_map_view_des"
+            android:label="@string/activity_simple_map_view">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_basic" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".CustomMapViewActivity"
+            android:description="@string/activity_custom_map_view_des"
+            android:label="@string/activity_custom_map_view">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_basic" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".BasicLocationTrackingActivity"
+            android:description="@string/activity_basic_location_tracking_des"
+            android:label="@string/activity_basic_location_tracking">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_basic" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".CustomMapStyleActivity"
+            android:description="@string/activity_custom_map_style_des"
+            android:label="@string/activity_custom_map_style">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".CustomLocationPuckActivity"
+            android:description="@string/activity_custom_location_puck_icon_des"
+            android:label="@string/activity_custom_location_puck_icon">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_location" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".LocationModesActivity"
+            android:description="@string/activity_location_modes_des"
+            android:label="@string/activity_location_modes"
+            android:theme="@style/Theme.NBMapsDemoApp.ActionBar">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_location" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".CustomizedLocationPulsingCircleActivity"
+            android:description="@string/activity_location_puck_pulsing_des"
+            android:label="@string/activity_location_puck_pulsing"
+            android:theme="@style/Theme.NBMapsDemoApp.ActionBar">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_location" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".AnimatedImageSourceActivity"
+            android:description="@string/activity_animate_source_des"
+            android:label="@string/activity_animate_source">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:description="@string/simple_map_desc"
+            android:label="@string/simple_map">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_basic" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
+        <activity
+            android:name=".MarkersActivity"
             android:description="@string/marker_desc"
             android:label="@string/marker">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_annotation" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
@@ -44,6 +184,9 @@
             android:description="@string/api_client_desc"
             android:label="@string/api_client">
             <meta-data
+                android:name="@string/category"
+                android:value="@string/category_features" />
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
@@ -51,6 +194,9 @@
             android:name=".PolylineActivity"
             android:description="@string/polyline_desc"
             android:label="@string/polyline">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_annotation" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
@@ -60,6 +206,9 @@
             android:description="@string/polygon_desc"
             android:label="@string/polygon">
             <meta-data
+                android:name="@string/category"
+                android:value="@string/category_annotation" />
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
@@ -68,6 +217,9 @@
             android:description="@string/info_window_desc"
             android:label="@string/info_window">
             <meta-data
+                android:name="@string/category"
+                android:value="@string/category_annotation" />
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
@@ -75,7 +227,9 @@
             android:name=".BoundsActivity"
             android:description="@string/bounds_desc"
             android:label="@string/bounds">
-
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
@@ -86,13 +240,19 @@
             android:enabled="false"
             android:label="@string/snapshot">
             <meta-data
+                android:name="@string/category"
+                android:value="@string/category_features" />
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
         <activity
-            android:name=".AnimateMarkersActivity"
+            android:name=".AnimateSymbolsActivity"
             android:description="@string/animate_marker_desc"
             android:label="@string/animate_marker">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
@@ -103,6 +263,9 @@
             android:enabled="false"
             android:label="@string/animate_route">
             <meta-data
+                android:name="@string/category"
+                android:value="@string/category_features" />
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
@@ -110,7 +273,9 @@
         <activity android:name=".PolygonClusterActivity"
             android:description="@string/polygon_cluster_desc"
             android:label="@string/polygon_cluster">
-
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
@@ -119,7 +284,9 @@
         <activity android:name=".HeatmapLayerActivity"
             android:description="@string/description_heat_map_layer"
             android:label="@string/activity_heat_map_layer">
-
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_style" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />

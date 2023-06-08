@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:nextbillion="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_list_layers"
+        android:title="@string/list_all_layers_in_the_style"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_list_sources"
+        android:title="@string/list_all_sources_in_the_style"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_water_color"
+        android:title="@string/color_the_water"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_background_opacity"
+        android:title="@string/set_background_opacity"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_layer_visibility"
+        android:title="@string/set_layer_visibility_to_false"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_update_water_color_on_zoom"
+        android:title="@string/change_the_water_color_on_zoom"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_bring_water_to_front"
+        android:title="@string/bring_water_to_front"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_style_building_layer"
+        android:title="Style Building Layer"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/action_gradient_line_layer"
+        android:title="Gradient Line Layer"
+        nextbillion:showAsAction="never" />
+    <item
+        android:id="@+id/multi_symbols_layer"
+        android:title="Multi Symbols Layer"
+        nextbillion:showAsAction="never" />
+</menu>

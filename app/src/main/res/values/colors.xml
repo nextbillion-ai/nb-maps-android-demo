@@ -20,4 +20,6 @@
 
     <color name="palette_mint_100">#ff23d2aa</color>
     <color name="palette_navy100">#ff000028</color>
+
+    <color name="redAccent">#D50000</color>
 </resources>
