@@ -50,7 +50,7 @@ class PolylineActivity : AppCompatActivity() {
             applyPolyline(it)
             false
         }
-        map.setStyle( Style.Builder().fromUri("https://api.nextbillion.io/maps/openstreetmap/style.json"))
+        map.setStyle( Style.Builder().fromUri(StyleConstants.LIGHT))
     }
 
     private fun showSnackBar() {

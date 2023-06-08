@@ -147,7 +147,7 @@ public class PolygonActivity extends AppCompatActivity implements View.OnClickLi
     private void onMapSync(NextbillionMap map) {
         mMap = map;
         addMapListener();
-        mMap.setStyle(new Style.Builder().fromUri("https://api.nextbillion.io/maps/openstreetmap/style.json"));
+        mMap.setStyle(new Style.Builder().fromUri(StyleConstants.LIGHT));
     }
 
     private void addMapListener() {
