@@ -2,7 +2,7 @@
 *notes: for troubleshooting and bugs reporting, please reach out to dan@nextbillion.ai*
 
 ## Installing
-before running this project, make sure you have configured your own API Key `nexbillion_ai_api_key` at `res/values/strings.xml`
+before running this project, make sure you have configured your own API Key `nbmap_access_key` at `res/values/strings.xml`
 
 
 ## Migrating

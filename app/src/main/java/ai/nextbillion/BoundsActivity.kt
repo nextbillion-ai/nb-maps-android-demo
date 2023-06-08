@@ -2,6 +2,7 @@ package ai.nextbillion
 
 import ai.nextbillion.databinding.ActivityBoundsBinding
 import ai.nextbillion.maps.annotations.PolygonOptions
+import ai.nextbillion.maps.camera.CameraUpdateFactory
 import ai.nextbillion.maps.core.NextbillionMap
 import ai.nextbillion.maps.core.OnMapReadyCallback
 import ai.nextbillion.maps.core.Style
@@ -76,6 +77,7 @@ class BoundsActivity : AppCompatActivity(){
                 it.fillColor(Color.RED)
                 mMap.addPolygon(it)
             }
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
         }
 
     }

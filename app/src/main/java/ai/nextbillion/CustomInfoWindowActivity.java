@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,7 +32,7 @@ public class CustomInfoWindowActivity extends AppCompatActivity implements OnMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_marker);
+        setContentView(R.layout.activity_animate_markers);
 
         ivBack = findViewById(R.id.iv_back);
         mapView = findViewById(R.id.map_view);
@@ -153,8 +152,8 @@ public class CustomInfoWindowActivity extends AppCompatActivity implements OnMap
             infoWindowColor(in.readInt());
         }
 
-        public static final Parcelable.Creator<CustomMarkerOptions> CREATOR
-                = new Parcelable.Creator<CustomMarkerOptions>() {
+        public static final Creator<CustomMarkerOptions> CREATOR
+                = new Creator<CustomMarkerOptions>() {
             public CustomMarkerOptions createFromParcel(Parcel in) {
                 return new CustomMarkerOptions(in);
             }

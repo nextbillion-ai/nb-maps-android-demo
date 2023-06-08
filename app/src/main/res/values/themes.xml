@@ -28,5 +28,20 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CustomLocationComponent" parent="nbmap_LocationComponent">
+        <item name="nbmap_foregroundDrawable">@drawable/custom_user_icon</item>
+
+        <item name="nbmap_bearingDrawable">@drawable/custom_user_arrow</item>
+        <item name="nbmap_gpsDrawable">@drawable/custom_user_puck_icon</item>
+
+        <item name="nbmap_accuracyAlpha">0.15</item>
+        <item name="nbmap_accuracyColor">#FF82C6</item>
+
+        <item name="nbmap_elevation">0dp</item>
+        <item name="nbmap_compassAnimationEnabled">false</item>
+        <item name="nbmap_accuracyAnimationEnabled">false</item>
+        <item name="nbmap_pulsingLocationCircleEnabled">true</item>
+
+    </style>
 
 </resources>

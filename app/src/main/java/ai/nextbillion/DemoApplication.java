@@ -9,6 +9,6 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Nextbillion.getInstance(this, getString(R.string.nexbillion_ai_api_key));
+        Nextbillion.getInstance(this, getString(R.string.nbmap_access_key));
     }
 }
