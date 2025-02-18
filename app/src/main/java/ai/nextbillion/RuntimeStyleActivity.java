@@ -168,30 +168,29 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         }
 
         try {
-            switch (item.getItemId()) {
-                case R.id.action_list_layers:
-                    listLayers();
-                    return true;
-                case R.id.action_list_sources:
-                    listSources();
-                    return true;
-                case R.id.action_water_color:
-                    setWaterColor();
-                    return true;
-                case R.id.action_background_opacity:
-                    setBackgroundOpacity();
-                    return true;
-                case R.id.action_layer_visibility:
-                    setLayerInvisible();
-                    return true;
-                case R.id.action_update_water_color_on_zoom:
-                    updateWaterColorOnZoom();
-                    return true;
-                case R.id.action_bring_water_to_front:
-                    bringWaterToFront();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
+            if (item.getItemId() == R.id.action_list_layers) {
+                listLayers();
+                return true;
+            } else if (item.getItemId() == R.id.action_list_sources) {
+                listSources();
+                return true;
+            } else if (item.getItemId() == R.id.action_water_color) {
+                setWaterColor();
+                return true;
+            } else if (item.getItemId() == R.id.action_background_opacity) {
+                setBackgroundOpacity();
+                return true;
+            } else if (item.getItemId() == R.id.action_layer_visibility) {
+                setLayerInvisible();
+                return true;
+            } else if (item.getItemId() == R.id.action_update_water_color_on_zoom) {
+                updateWaterColorOnZoom();
+                return true;
+            } else if (item.getItemId() == R.id.action_bring_water_to_front) {
+                bringWaterToFront();
+                return true;
+            } else {
+                return super.onOptionsItemSelected(item);
             }
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

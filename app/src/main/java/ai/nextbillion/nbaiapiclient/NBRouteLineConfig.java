@@ -132,11 +132,11 @@ public class NBRouteLineConfig {
             }
 
             if (originalIcon == -1) {
-                originalIcon = R.drawable.blue_marker;
+                originalIcon = ai.nextbillion.maps.R.drawable.ic_route_origin;
             }
 
             if (destinationIcon == -1) {
-                destinationIcon = R.drawable.red_marker;
+                destinationIcon = ai.nextbillion.maps.R.drawable.nbmap_marker_icon_default;
             }
 
             return new NBRouteLineConfig(lineWidth, routeName, lineColor, lineCap, lineJoin, originalIcon, destinationIcon);

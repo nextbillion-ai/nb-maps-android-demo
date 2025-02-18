@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ai.nextbillion.databinding.ActivityPolylineBinding
 import ai.nextbillion.maps.annotations.Marker
-import ai.nextbillion.maps.annotations.MarkerOptions
 import ai.nextbillion.maps.annotations.Polyline
+import ai.nextbillion.maps.annotations.PolylineOptions
 import ai.nextbillion.maps.camera.CameraUpdateFactory
 import ai.nextbillion.maps.core.NextbillionMap
 import ai.nextbillion.maps.core.Style
 import ai.nextbillion.maps.geometry.LatLng
 import ai.nextbillion.maps.geometry.LatLngBounds
 import ai.nextbillion.view.ColorSelectorView
-import ai.nextbillion.view.SettingSwitchView
 import ai.nextbillion.view.SliderBarView
 import android.content.Context
 import android.graphics.Color
@@ -90,7 +89,10 @@ class PolylineActivity : AppCompatActivity() {
         polyline?.let {
             mMap.removePolyline(it)
         }
-        polyline = mMap.addPolyline(points, lineColor)
+//        polyline = mMap.addPolyline(points, lineColor)
+        val options =  PolylineOptions().color(Color.parseColor(lineColor)).width(lineWidth)
+        options.addAll(points)
+        mMap.addPolylines(listOf(options))
         polyline?.width = lineWidth
         animateBound(1f)
     }

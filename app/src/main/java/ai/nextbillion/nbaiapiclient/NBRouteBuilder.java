@@ -94,8 +94,8 @@ public class NBRouteBuilder {
                         lineJoin(mLineJoin)
                 );
         mStyle.addLayer(routeLayer);
-        int originWaypointIcon = R.drawable.blue_marker;
-        int destinationWaypointIcon = R.drawable.red_marker;
+        int originWaypointIcon = ai.nextbillion.maps.R.drawable.ic_route_origin;
+        int destinationWaypointIcon = ai.nextbillion.maps.R.drawable.nbmap_marker_icon_default;
         Bitmap bitmap = getBitmapFromDrawable(AppCompatResources.getDrawable(context, originWaypointIcon));
         mStyle.addImage(ORIGIN_MARKER_NAME, bitmap);
         bitmap = getBitmapFromDrawable(AppCompatResources.getDrawable(context, destinationWaypointIcon));

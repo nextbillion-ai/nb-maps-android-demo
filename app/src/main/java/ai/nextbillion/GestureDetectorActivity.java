@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
-
+import ai.nextbillion.R;
 /**
  * Test activity showcasing APIs around gestures implementation.
  */
@@ -238,36 +238,35 @@ public class GestureDetectorActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         UiSettings uiSettings = nextbillionMap.getUiSettings();
-        switch (item.getItemId()) {
-            case R.id.menu_gesture_focus_point:
-                fixedFocalPointEnabled(focalPointLatLng == null);
-                return true;
-            case R.id.menu_gesture_animation:
-                uiSettings.setScaleVelocityAnimationEnabled(!uiSettings.isScaleVelocityAnimationEnabled());
-                uiSettings.setRotateVelocityAnimationEnabled(!uiSettings.isRotateVelocityAnimationEnabled());
-                uiSettings.setFlingVelocityAnimationEnabled(!uiSettings.isFlingVelocityAnimationEnabled());
-                return true;
-            case R.id.menu_gesture_rotate:
-                uiSettings.setRotateGesturesEnabled(!uiSettings.isRotateGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_tilt:
-                uiSettings.setTiltGesturesEnabled(!uiSettings.isTiltGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_zoom:
-                uiSettings.setZoomGesturesEnabled(!uiSettings.isZoomGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_scroll:
-                uiSettings.setScrollGesturesEnabled(!uiSettings.isScrollGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_double_tap:
-                uiSettings.setDoubleTapGesturesEnabled(!uiSettings.isDoubleTapGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_quick_zoom:
-                uiSettings.setQuickZoomGesturesEnabled(!uiSettings.isQuickZoomGesturesEnabled());
-                return true;
-            case R.id.menu_gesture_scroll_horizontal:
-                uiSettings.setHorizontalScrollGesturesEnabled(!uiSettings.isHorizontalScrollGesturesEnabled());
-                return true;
+        if (item.getItemId() == R.id.menu_gesture_focus_point) {
+            fixedFocalPointEnabled(focalPointLatLng == null);
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_animation) {
+            uiSettings.setScaleVelocityAnimationEnabled(!uiSettings.isScaleVelocityAnimationEnabled());
+            uiSettings.setRotateVelocityAnimationEnabled(!uiSettings.isRotateVelocityAnimationEnabled());
+            uiSettings.setFlingVelocityAnimationEnabled(!uiSettings.isFlingVelocityAnimationEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_rotate) {
+            uiSettings.setRotateGesturesEnabled(!uiSettings.isRotateGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_tilt) {
+            uiSettings.setTiltGesturesEnabled(!uiSettings.isTiltGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_zoom) {
+            uiSettings.setZoomGesturesEnabled(!uiSettings.isZoomGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_scroll) {
+            uiSettings.setScrollGesturesEnabled(!uiSettings.isScrollGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_double_tap) {
+            uiSettings.setDoubleTapGesturesEnabled(!uiSettings.isDoubleTapGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_quick_zoom) {
+            uiSettings.setQuickZoomGesturesEnabled(!uiSettings.isQuickZoomGesturesEnabled());
+            return true;
+        } else if (item.getItemId() == R.id.menu_gesture_scroll_horizontal) {
+            uiSettings.setHorizontalScrollGesturesEnabled(!uiSettings.isHorizontalScrollGesturesEnabled());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

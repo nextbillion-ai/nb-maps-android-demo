@@ -215,12 +215,14 @@ public class MarkersActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuItemReset:
-                resetMap();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (nextbillionMap == null) {
+            return super.onOptionsItemSelected(item);
         }
+        if (item.getItemId() == R.id.menuItemReset) {
+            resetMap();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
