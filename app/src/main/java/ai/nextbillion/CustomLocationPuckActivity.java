@@ -78,7 +78,7 @@ public class CustomLocationPuckActivity extends AppCompatActivity implements OnM
         LocationComponent locationComponent = nextbillionMap.getLocationComponent();
         defaultStyle = !defaultStyle;
         LocationComponentOptions options = LocationComponentOptions.createFromAttributes(
-                this, defaultStyle ? R.style.nbmap_LocationComponent : R.style.CustomLocationComponent);
+                this, defaultStyle ? ai.nextbillion.maps.R.style.nbmap_LocationComponent : R.style.CustomLocationComponent);
         options = options.toBuilder().pulseEnabled(true).build();
         locationComponent.applyStyle(options);
         locationComponent.setCameraMode(CameraMode.TRACKING);

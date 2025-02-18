@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         locationEngine = LocationEngineProvider.getBestLocationEngine(this, false);
         searchView = findViewById(R.id.floating_search_view);
         mActionButton = findViewById(R.id.trackLocation);
@@ -147,23 +148,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         logoViewBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        switch (item.getItemId()) {
-            case R.id.action_o1_d1:
-                moveLatLng();
-                return true;
-            case R.id.action_clear_marker:
-                clearAllMarker();
-                return true;
-            case R.id.action_o2_d1:
-                logoViewBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                mActionButton.setVisibility(View.GONE);
-                return true;
-            case R.id.action_o2_d2:
-                touchEnable = !touchEnable;
-                String title = touchEnable ? "Disable touch event" : "Enable touch event";
-                item.setTitle(title);
-                setupTouchEvent(touchEnable);
-                return true;
+        if (item == null) return false;
+        if (item.getItemId() == R.id.action_o1_d1) {
+            moveLatLng();
+            return true;
+        } else if (item.getItemId() == R.id.action_clear_marker) {
+            clearAllMarker();
+            return true;
+        } else if (item.getItemId() == R.id.action_o2_d1) {
+            logoViewBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            mActionButton.setVisibility(View.GONE);
+            return true;
+        } else if (item.getItemId() == R.id.action_o2_d2) {
+            touchEnable = !touchEnable;
+            String title = touchEnable ? "Disable touch event" : "Enable touch event";
+            item.setTitle(title);
+            setupTouchEvent(touchEnable);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -301,25 +302,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem item = popupMenu.getMenu().getItem(2);
         String title = touchEnable ? "Disable touch event" : "Enable touch event";
         item.setTitle(title);
-
         popupMenu.setOnMenuItemClickListener(item1 -> {
-            switch (item1.getItemId()) {
-                case R.id.action_o1_d1:
-                    moveLatLng();
-                    return true;
-                case R.id.action_o1_d2:
-                    clearAllMarker();
-                    return true;
-                case R.id.action_o2_d1:
-                    logoViewBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    mActionButton.setVisibility(View.GONE);
-                    return true;
-                case R.id.action_o2_d2:
-                    touchEnable = !touchEnable;
-                    String title1 = touchEnable ? "Disable touch event" : "Enable touch event";
-                    item1.setTitle(title1);
-                    setupTouchEvent(touchEnable);
-                    return true;
+            if (item1 == null) return false;
+
+            if (item1.getItemId() == R.id.action_o1_d1) {
+                moveLatLng();
+                return true;
+            } else if (item1.getItemId() == R.id.action_clear_marker) {
+                clearAllMarker();
+                return true;
+            } else if (item1.getItemId() == R.id.action_o2_d1) {
+                logoViewBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                mActionButton.setVisibility(View.GONE);
+                return true;
+            } else if (item1.getItemId() == R.id.action_o2_d2) {
+                touchEnable = !touchEnable;
+                String title1 = touchEnable ? "Disable touch event" : "Enable touch event";
+                item1.setTitle(title1);
+                setupTouchEvent(touchEnable);
+                return true;
             }
             return false;
         });

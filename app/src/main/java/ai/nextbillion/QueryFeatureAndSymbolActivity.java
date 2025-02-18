@@ -100,7 +100,7 @@ public class QueryFeatureAndSymbolActivity extends AppCompatActivity {
     public void addSymbolLayer(Style style) {
         try {
             String testPoints = ResourceUtils.readRawResource(mapView.getContext(), R.raw.test_points_utrecht);
-            Bitmap markerImage = BitmapFactory.decodeResource(getResources(), R.drawable.nbmap_marker_icon_default);
+            Bitmap markerImage = BitmapFactory.decodeResource(getResources(), ai.nextbillion.maps.R.drawable.nbmap_marker_icon_default);
 
             style.addImage("test-icon", markerImage);
             style.addSource(new GeoJsonSource("symbols-source", testPoints));

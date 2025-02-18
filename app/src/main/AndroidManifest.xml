@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NBMapsDemoApp.NoActionBar">
         <activity android:name=".overview.OverviewActivity"
-            android:theme="@style/Theme.NBMapsDemoApp.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
