@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_house_numbers">House numbers</string>
+    <string name="description_house_numbers">Show real house numbers with visibility, zoom and style controls.</string>
+    <string-array name="house_number_providers">
+        <item>TomTom</item>
+        <item>TomTom Orbis</item>
+        <item>MapTiler</item>
+    </string-array>
+    <string name="house_numbers_show">Show house numbers</string>
+    <string name="house_numbers_street">Zoom 16</string>
+    <string name="house_numbers_detail">Zoom 19</string>
+    <string name="house_numbers_style">Style</string>
+    <string name="house_numbers_unavailable">House numbers are unavailable in this map style.</string>
+    <string name="house_numbers_loading">Loading house numbers…</string>
+    <string name="house_numbers_failed">Map load failed: %1$s</string>
+    <string name="house_numbers_status">%1$s · %2$s · zoom %3$.1f · %4$d labels</string>
+    <string name="house_numbers_hint">Zoom in to 17 or closer. Numbers come from the map provider and depend on local coverage. An empty area may have no address data.</string>
+</resources>

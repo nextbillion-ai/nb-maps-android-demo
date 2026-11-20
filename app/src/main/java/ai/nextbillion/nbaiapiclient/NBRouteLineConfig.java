@@ -132,7 +132,7 @@ public class NBRouteLineConfig {
             }
 
             if (originalIcon == -1) {
-                originalIcon = ai.nextbillion.maps.R.drawable.ic_route_origin;
+                originalIcon = ai.nextbillion.R.drawable.ic_route_origin;
             }
 
             if (destinationIcon == -1) {

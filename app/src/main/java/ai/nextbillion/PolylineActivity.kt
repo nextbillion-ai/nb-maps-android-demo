@@ -1,5 +1,7 @@
 package ai.nextbillion
 
+import ai.nextbillion.maps.annotations.MarkerOptions
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ai.nextbillion.databinding.ActivityPolylineBinding
@@ -49,7 +51,7 @@ class PolylineActivity : AppCompatActivity() {
             applyPolyline(it)
             false
         }
-        map.setStyle( Style.Builder().fromUri(StyleConstants.LIGHT))
+        map.setStyle( Style.Builder().fromUri(StyleConstants.getBright()))
     }
 
     private fun showSnackBar() {
@@ -63,7 +65,7 @@ class PolylineActivity : AppCompatActivity() {
         points.add(latLng)
 
         if (points.size < 2) {
-            originMarker = mMap.addMarker(latLng)
+            originMarker = mMap.addMarker(MarkerOptions().position(latLng))
         } else {
             originMarker?.let {
                 mMap.removeMarker(it)
@@ -80,7 +82,7 @@ class PolylineActivity : AppCompatActivity() {
             removeAllPolyline()
             return
         } else {
-            points.removeLast()
+            points.removeAt(points.lastIndex)
             recreatePoleLine()
         }
     }
@@ -92,7 +94,7 @@ class PolylineActivity : AppCompatActivity() {
 //        polyline = mMap.addPolyline(points, lineColor)
         val options =  PolylineOptions().color(Color.parseColor(lineColor)).width(lineWidth)
         options.addAll(points)
-        mMap.addPolylines(listOf(options))
+        polyline = mMap.addPolyline(options)
         polyline?.width = lineWidth
         animateBound(1f)
     }

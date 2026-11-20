@@ -126,7 +126,7 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(@NonNull NextbillionMap nextbillionMap) {
         this.nextbillionMap = nextbillionMap;
         nextbillionMap.animateCamera(CameraUpdateFactory.zoomBy(13));
-        nextbillionMap.setStyle(StyleConstants.NBMAP_STREETS, style -> {
+        nextbillionMap.setStyle(StyleConstants.getBright(), style -> {
             locationComponent = nextbillionMap.getLocationComponent();
             locationComponent.activateLocationComponent(
                     LocationComponentActivationOptions

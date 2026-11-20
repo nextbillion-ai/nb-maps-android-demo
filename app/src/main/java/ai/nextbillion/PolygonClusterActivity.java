@@ -242,10 +242,10 @@ public class PolygonClusterActivity extends AppCompatActivity implements OnMapRe
 
     private String getNextStyle() {
         currentStyleIndex++;
-        if (currentStyleIndex == Data.STYLES.length) {
+        if (currentStyleIndex == Data.styles().length) {
             currentStyleIndex = 0;
         }
-        return Data.STYLES[currentStyleIndex];
+        return Data.styles()[currentStyleIndex];
     }
 
 
@@ -296,10 +296,8 @@ public class PolygonClusterActivity extends AppCompatActivity implements OnMapRe
     }
 
     private static class Data {
-        private static final String[] STYLES = new String[]{
-                "https://api.nextbillion.io/maps/streets/style.json",
-                "https://api.nextbillion.io/maps/hybrid/style.json",
-                "https://api.nextbillion.io/maps/dark/style.json"
-        };
+        private static String[] styles() {
+            return new String[]{StyleConstants.getBright(), StyleConstants.getSatellite(), StyleConstants.getDark()};
+        }
     }
 }

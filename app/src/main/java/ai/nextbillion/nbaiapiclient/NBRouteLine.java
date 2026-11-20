@@ -60,7 +60,7 @@ public class NBRouteLine {
     private String mLineJoin = Property.LINE_JOIN_ROUND;
 
     @DrawableRes
-    private int originalIcon = ai.nextbillion.maps.R.drawable.ic_route_origin;
+    private int originalIcon = ai.nextbillion.R.drawable.ic_route_origin;
     @DrawableRes
     private int destinationIcon = ai.nextbillion.maps.R.drawable.nbmap_marker_icon_default;
 

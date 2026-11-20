@@ -22,10 +22,8 @@ import ai.nextbillion.maps.core.NextbillionMap;
 import ai.nextbillion.maps.core.OnMapReadyCallback;
 import ai.nextbillion.maps.core.Style;
 import ai.nextbillion.maps.geometry.LatLng;
-import ai.nextbillion.maps.plugins.annotation.Symbol;
-import ai.nextbillion.maps.plugins.annotation.SymbolManager;
-import ai.nextbillion.maps.plugins.annotation.SymbolOptions;
-import ai.nextbillion.maps.style.sources.GeoJsonOptions;
+import ai.nextbillion.utils.MapSymbol;
+import ai.nextbillion.maps.style.layers.Property;
 import ai.nextbillion.utils.SymbolGenerator;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,9 +36,10 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
     private MapView mapView;
     private RouteLine mRouteLine;
 
-    private SymbolManager symbolManager;
-    private Symbol vehicleSymbol;
-    private Symbol destinationSymbol;
+    private boolean destroyed;
+    private PulsingSymbol originSymbol;
+    private MapSymbol vehicleSymbol;
+    private MapSymbol destinationSymbol;
     RouteAnimator routeAnimator;
 
     @Override
@@ -54,11 +53,13 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
 
     @Override
     public void onMapReady(@NonNull NextbillionMap nextbillionMap) {
+        if (destroyed) return;
         this.nextbillionMap = nextbillionMap;
         nextbillionMap.addOnMapClickListener(AnimateAlongRouteActivity.this);
         nextbillionMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+                if (destroyed) return;
 //                showDirections();
                 mRouteLine = new RouteLine(style, "directions");
             }
@@ -93,6 +94,8 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
 //    }
 
     private void addWayPoints(String geometry) {
+        // Stop callbacks for the previous route before replacing its symbols and point list.
+        if (routeAnimator != null) routeAnimator.cancel();
         LineString routeGeometry = LineString.fromPolyline(geometry, 5);
         List<Point> routePoints = routeGeometry.coordinates();
         Point origin = routePoints.get(0);
@@ -103,7 +106,7 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
         initVehicleSymbol(nextbillionMap, mapView, nextbillionMap.getStyle(), originLatLng);
         addOrigin(originLatLng, iconBitmap);
         addDestination(nextbillionMap.getStyle(), iconBitmap, destLatLng);
-        routeAnimator = new RouteAnimator(symbolManager, vehicleSymbol, mRouteLine, routePoints, new RouteAnimator.RouteAnimatorCallback() {
+        routeAnimator = new RouteAnimator(vehicleSymbol, mRouteLine, routePoints, new RouteAnimator.RouteAnimatorCallback() {
             @Override
             public void onAnimationEnd() {
 
@@ -114,9 +117,10 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
     }
 
     private void addOrigin(LatLng latLng, Bitmap bitmap) {
-        PulsingSymbol pulsingSymbol = new PulsingSymbol("directions-origin");
-        pulsingSymbol.init(nextbillionMap.getStyle(), bitmap, "directions-origin-image");
-        pulsingSymbol.update(latLng);
+        if (originSymbol != null) originSymbol.close();
+        originSymbol = new PulsingSymbol("directions-origin");
+        originSymbol.init(nextbillionMap.getStyle(), bitmap, "directions-origin-image");
+        originSymbol.update(latLng);
     }
 
     private void addDestination(Style style, Bitmap icon, LatLng latLng) {
@@ -131,25 +135,9 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
 
     private void initVehicleSymbol(NextbillionMap nextbillionMap, MapView mapView, Style style, LatLng origin) {
         style.addImage(VEHICLE_ICON_ID, ((BitmapDrawable) getResources().getDrawable(R.mipmap.ic_nb_taxi)).getBitmap());
-        if (symbolManager == null) {
-            GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
-            symbolManager = new SymbolManager(mapView, nextbillionMap, style, null, geoJsonOptions);
-            symbolManager.addClickListener(symbol -> {
-                Toast.makeText(AnimateAlongRouteActivity.this,
-                        String.format("Symbol clicked %s", symbol.getId()),
-                        Toast.LENGTH_SHORT
-                ).show();
-                return false;
-            });
-            symbolManager.setIconAllowOverlap(true);
-            symbolManager.setTextAllowOverlap(true);
-        }
-
-        SymbolOptions symbolOptions = new SymbolOptions()
-                .withLatLng(origin)
-                .withIconImage(VEHICLE_ICON_ID)
-                .withIconSize(0.8f);
-        vehicleSymbol = symbolManager.create(symbolOptions);
+        if (vehicleSymbol != null) vehicleSymbol.close();
+        vehicleSymbol = new MapSymbol(style, "route-vehicle", origin, VEHICLE_ICON_ID,
+                0.8f, Property.ICON_ANCHOR_CENTER, null);
     }
 
 
@@ -177,8 +165,13 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
 
     @Override
     protected void onStop() {
-        super.onStop();
+        // Stop Handler work and symbol animations while the map screen is in the background.
+        if (routeAnimator != null) routeAnimator.cancel();
+        if (vehicleSymbol != null) vehicleSymbol.cancel();
+        if (destinationSymbol != null) destinationSymbol.cancel();
+        if (originSymbol != null) originSymbol.stopPulsing();
         mapView.onStop();
+        super.onStop();
     }
 
     @Override
@@ -189,11 +182,18 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        destroyed = true;
         if (routeAnimator != null) {
             routeAnimator.cancel();
         }
+        // Release objects that access style sources before MapView destroys its native resources.
+        if (vehicleSymbol != null) vehicleSymbol.close();
+        if (destinationSymbol != null) destinationSymbol.close();
+        if (originSymbol != null) originSymbol.close();
+        if (nextbillionMap != null) nextbillionMap.removeOnMapClickListener(this);
         mapView.onDestroy();
+        nextbillionMap = null;
+        super.onDestroy();
     }
 
     @Override
@@ -219,7 +219,13 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
         List<Feature> features = nextbillionMap.queryRenderedFeatures(clickPoint);
 
         if (!features.isEmpty()) {
-            String symbolId = features.get(0).getStringProperty(InfoWindowSymbol.SYMBOL_ID);
+            Feature clicked = features.get(0);
+            if (clicked.hasProperty(MapSymbol.ID_PROPERTY)) {
+                Toast.makeText(this, "Symbol clicked " + clicked.getStringProperty(MapSymbol.ID_PROPERTY),
+                        Toast.LENGTH_SHORT).show();
+            }
+            String symbolId = clicked.hasProperty(InfoWindowSymbol.SYMBOL_ID)
+                    ? clicked.getStringProperty(InfoWindowSymbol.SYMBOL_ID) : null;
             if (!TextUtils.isEmpty(symbolId)) {
                 for (InfoWindowSymbol symbol : symbols) {
                     if (symbol.getSymbolId().equals(symbolId)) {
@@ -236,26 +242,10 @@ public class AnimateAlongRouteActivity extends AppCompatActivity implements OnMa
     ///////////////////////////////////////////////////////////////////////////
 
     private void addWayPoint(NextbillionMap nextbillionMap, MapView mapView, Style style, LatLng latLng, Bitmap icon, String iconId) {
-        if (symbolManager == null) {
-            GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
-            symbolManager = new SymbolManager(mapView, nextbillionMap, style, null, geoJsonOptions);
-            symbolManager.addClickListener(symbol -> {
-                Toast.makeText(AnimateAlongRouteActivity.this,
-                        String.format("Symbol clicked %s", symbol.getId()),
-                        Toast.LENGTH_SHORT
-                ).show();
-                return false;
-            });
-            symbolManager.setIconAllowOverlap(true);
-            symbolManager.setTextAllowOverlap(true);
-        }
         style.addImage(iconId, icon);
-        SymbolOptions symbolOptions = new SymbolOptions()
-                .withLatLng(latLng)
-                .withIconImage(iconId)
-                .withIconSize(0.5f)
-                .withIconAnchor(ICON_ANCHOR_BOTTOM);
-        destinationSymbol = symbolManager.create(symbolOptions);
+        if (destinationSymbol != null) destinationSymbol.close();
+        destinationSymbol = new MapSymbol(style, "route-waypoint", latLng, iconId,
+                0.5f, ICON_ANCHOR_BOTTOM, null);
     }
 
     private Point findSnappedPoint(Location location, List<Point> coordinates) {

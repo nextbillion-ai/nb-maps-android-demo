@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.lang.ref.WeakReference;
 
 import ai.nextbillion.R;
 import ai.nextbillion.kits.geojson.Feature;
@@ -28,6 +29,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     private static final String KEY_STATE_FEATURES = "featureList";
 
+    private LoadFeatureTask loadFeatureTask;
     private RecyclerView recyclerView;
     private OverviewAdapter sectionAdapter;
     private List<DemoFeature> features;
@@ -54,7 +56,7 @@ public class OverviewActivity extends AppCompatActivity {
             loadFeatures();
         } else {
             features = savedInstanceState.getParcelableArrayList(KEY_STATE_FEATURES);
-            onFeaturesLoaded(features);
+            if (features == null) loadFeatures(); else onFeaturesLoaded(features);
         }
     }
 
@@ -66,7 +68,8 @@ public class OverviewActivity extends AppCompatActivity {
 
     private void loadFeatures() {
         try {
-            new LoadFeatureTask().execute(
+            loadFeatureTask = new LoadFeatureTask(this);
+            loadFeatureTask.execute(
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_ACTIVITIES | PackageManager.GET_META_DATA));
         } catch (PackageManager.NameNotFoundException exception) {
@@ -108,7 +111,20 @@ public class OverviewActivity extends AppCompatActivity {
         outState.putParcelableArrayList(KEY_STATE_FEATURES, (ArrayList<DemoFeature>) features);
     }
 
-    private class LoadFeatureTask extends AsyncTask<PackageInfo, Void, List<DemoFeature>> {
+    @Override
+    protected void onDestroy() {
+        if (loadFeatureTask != null) loadFeatureTask.cancel(true);
+        super.onDestroy();
+    }
+
+    private static class LoadFeatureTask extends AsyncTask<PackageInfo, Void, List<DemoFeature>> {
+        private final WeakReference<OverviewActivity> owner;
+        private final Resources resources;
+
+        LoadFeatureTask(OverviewActivity activity) {
+            owner = new WeakReference<>(activity);
+            resources = activity.getApplicationContext().getResources();
+        }
 
         @Override
         protected List<DemoFeature> doInBackground(PackageInfo... params) {
@@ -117,8 +133,9 @@ public class OverviewActivity extends AppCompatActivity {
             String metaDataKey = "category";
 
             for (ActivityInfo info : app.activities) {
+                if (isCancelled()) break;
                 if (info.labelRes != 0 && !info.name.equals(OverviewActivity.class.getName()) && info.enabled) {
-                    String label = getString(info.labelRes);
+                    String label = resources.getString(info.labelRes);
                     String description = resolveString(info.descriptionRes);
                     String category = resolveMetaData(info.metaData, metaDataKey);
                     features.add(new DemoFeature(info.name, label, description, category));
@@ -149,7 +166,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         private String resolveString(@StringRes int stringRes) {
             try {
-                return getString(stringRes);
+                return resources.getString(stringRes);
             } catch (Resources.NotFoundException exception) {
                 return "-";
             }
@@ -158,7 +175,10 @@ public class OverviewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<DemoFeature> features) {
             super.onPostExecute(features);
-            onFeaturesLoaded(features);
+            OverviewActivity activity = owner.get();
+            if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                activity.onFeaturesLoaded(features);
+            }
         }
     }
 }

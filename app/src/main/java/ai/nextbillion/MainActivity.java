@@ -29,7 +29,7 @@ import ai.nextbillion.geocoding.rest.SearchResponse;
 import ai.nextbillion.gestures.MoveGestureDetector;
 import ai.nextbillion.maps.annotations.Marker;
 import ai.nextbillion.maps.annotations.MarkerOptions;
-import ai.nextbillion.maps.core.MapView;
+import ai.nextbillion.view.DemoMapView;
 import ai.nextbillion.maps.core.NextbillionMap;
 import ai.nextbillion.maps.core.OnMapReadyCallback;
 import ai.nextbillion.maps.core.Style;
@@ -57,7 +57,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NextbillionMap.OnMapClickListener, LocationEngineCallback<LocationEngineResult>, NextbillionMap.OnMoveListener, OnCameraTrackingChangedListener {
 
-    private MapView mapView;
+    private DemoMapView mapView;
+    private boolean destroyed;
+    private boolean started;
+    private LocationEngineRequest locationRequest;
+    private Call<SearchResponse> searchCall;
     private LogoPickerDialog logoPickerDialog;
     private ImageView backBtn;
 
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locationEngine = LocationEngineProvider.getBestLocationEngine(this, false);
+        locationEngine = LocationEngineProvider.getBestLocationEngine(getApplicationContext());
         searchView = findViewById(R.id.floating_search_view);
         mActionButton = findViewById(R.id.trackLocation);
         mapView = findViewById(R.id.map_view);
@@ -178,10 +182,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void searchLocation(String currentQuery, boolean searchAction) {
-        if (currentLocation != null) {
+        if (currentLocation != null && !destroyed) {
+            if (searchCall != null) searchCall.cancel();
             retrofit2.Callback<SearchResponse> callback = new retrofit2.Callback<SearchResponse>() {
                 @Override
                 public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                    if (destroyed || call.isCanceled()) return;
                     if (response.body() == null) {
                         onSearchFailed();
                         return;
@@ -206,11 +212,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 @Override
                 public void onFailure(Call<SearchResponse> call, Throwable t) {
-                    onSearchFailed();
+                    if (!destroyed && !call.isCanceled()) onSearchFailed();
                 }
             };
 
-            GeoCodingRequest.searchLocation(currentQuery, currentLocation, callback);
+            searchCall = GeoCodingRequest.searchLocation(currentQuery, currentLocation, callback);
         }
     }
 
@@ -255,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull NextbillionMap nbMap) {
+        if (destroyed) return;
         this.nextbillionMap = nbMap;
         nextbillionMap.getStyle(this::buildEngineRequest);
         nextbillionMap.setMinZoomPreference(5);
@@ -287,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void resetMapLogo(int resource) {
-        nextbillionMap.getUiSettings().setLogoResourceId(resource);
+        mapView.setLogoResourceId(resource);
     }
 
     private void updateLogoEnable(boolean enable) {
@@ -398,6 +405,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onStart() {
         super.onStart();
         mapView.onStart();
+        started = true;
+        startLocationUpdates();
     }
 
     @Override
@@ -414,8 +423,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStop() {
-        super.onStop();
+        started = false;
+        if (locationEngine != null) locationEngine.removeLocationUpdates(this);
         mapView.onStop();
+        super.onStop();
     }
 
     @Override
@@ -426,11 +437,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (locationEngine != null) {
-            locationEngine.removeLocationUpdates(this);
+        destroyed = true;
+        if (searchCall != null) {
+            searchCall.cancel();
+            searchCall = null;
+        }
+        if (locationEngine != null) locationEngine.removeLocationUpdates(this);
+        if (locationComponent != null) locationComponent.removeOnCameraTrackingChangedListener(this);
+        if (nextbillionMap != null) {
+            nextbillionMap.removeOnMapClickListener(this);
+            nextbillionMap.removeOnMoveListener(this);
         }
         mapView.onDestroy();
+        nextbillionMap = null;
+        super.onDestroy();
     }
 
     @Override
@@ -442,9 +462,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // Location
     @SuppressLint("MissingPermission")
     private void buildEngineRequest(Style style) {
+        if (destroyed || !PermissionsManager.areLocationPermissionsGranted(this)) return;
+        if (locationComponent != null) locationComponent.removeOnCameraTrackingChangedListener(this);
         locationComponent = nextbillionMap.getLocationComponent();
 
-        LocationEngineRequest request = new LocationEngineRequest.Builder(1000)
+        locationRequest = new LocationEngineRequest.Builder(1000)
                 .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(500)
                 .build();
@@ -456,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 LocationComponentOptions.builder(this).pulseEnabled(true)
                                         .build())
                         .locationEngine(locationEngine)
-                        .locationEngineRequest(request)
+                        .locationEngineRequest(locationRequest)
                         .build());
 
         // Enable Tracking Location Component
@@ -466,14 +488,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationComponent.addOnCameraTrackingChangedListener(this);
         mActionButton.setImageResource(R.drawable.ic_my_location);
 
-        locationEngine.requestLocationUpdates(request, this, null);
-        locationEngine.getLastLocation(this);
+        startLocationUpdates();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+        if (!destroyed && started && locationRequest != null
+                && PermissionsManager.areLocationPermissionsGranted(this)) {
+            locationEngine.removeLocationUpdates(this);
+            locationEngine.requestLocationUpdates(locationRequest, this, null);
+            locationEngine.getLastLocation(this);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionsManager != null) {
+            permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private void checkPermissions() {
@@ -489,6 +522,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 @Override
                 public void onPermissionResult(boolean granted) {
+                    if (destroyed) return;
                     if (granted) {
                         mapView.getMapAsync(MainActivity.this);
                     } else {
@@ -502,7 +536,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onSuccess(LocationEngineResult locationEngineResult) {
-        if (locationEngineResult == null || locationEngineResult.getLastLocation() == null) {
+        if (destroyed || !started || locationEngineResult == null || locationEngineResult.getLastLocation() == null) {
             return;
         }
         currentLocation = locationEngineResult.getLastLocation();
@@ -532,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onCameraTrackingDismissed() {
-        mActionButton.setImageResource(R.drawable.icon_location_searching);
+        if (!destroyed) mActionButton.setImageResource(R.drawable.icon_location_searching);
     }
 
     @Override

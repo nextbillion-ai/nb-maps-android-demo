@@ -88,7 +88,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
             nextbillionMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 1));
             nextbillionMap.setStyle(
                     new Style.Builder()
-                            .fromUri(StyleConstants.NBMAP_STREETS)
+                            .fromUri(StyleConstants.getBright())
                             // set custom transition
                             .withTransition(new TransitionOptions(250, 50)), style -> {
                         styleLoaded = true;

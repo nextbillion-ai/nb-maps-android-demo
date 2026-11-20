@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MarkersActivity extends AppCompatActivity {
 
     private NextbillionMap nextbillionMap;
+    private boolean destroyed;
+    private LoadLocationTask loadLocationTask;
     private MapView mapView;
     private List<LatLng> locations;
     private ProgressDialog progressDialog;
@@ -45,11 +47,13 @@ public class MarkersActivity extends AppCompatActivity {
 
 
     private void initMap(NextbillionMap nextbillionMap) {
+        if (destroyed) return;
         this.nextbillionMap =  nextbillionMap;
-        nextbillionMap.setStyle(StyleConstants.NBMAP_STREETS);
+        nextbillionMap.setStyle(StyleConstants.getBright());
         if (locations == null) {
             progressDialog = ProgressDialog.show(this, "Loading", "Fetching markers", false);
-            new LoadLocationTask(this, 100).execute();
+            loadLocationTask = new LoadLocationTask(this, 100);
+            loadLocationTask.execute();
         } else {
             showMarkers(100);
         }
@@ -88,8 +92,9 @@ public class MarkersActivity extends AppCompatActivity {
     }
 
     private void onLatLngListLoaded(List<LatLng> latLngs, int amount) {
-        progressDialog.hide();
-        locations = latLngs;
+        if (destroyed) return;
+        if (progressDialog != null) progressDialog.dismiss();
+        locations = latLngs != null ? latLngs : java.util.Collections.emptyList();
         showMarkers(amount);
     }
 
@@ -99,6 +104,7 @@ public class MarkersActivity extends AppCompatActivity {
         }
 
         nextbillionMap.clear();
+        markerOptionsList.clear();
         if (locations.size() < amount) {
             amount = locations.size();
         }
@@ -110,10 +116,12 @@ public class MarkersActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat("#.#####");
         Random random = new Random();
         int randomIndex;
+        List<LatLng> displayed = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
             randomIndex = random.nextInt(locations.size());
             LatLng latLng = locations.get(randomIndex);
+            displayed.add(latLng);
             markerOptionsList.add(new MarkerOptions()
                     .position(latLng)
                     .title(String.valueOf(i))
@@ -121,6 +129,13 @@ public class MarkersActivity extends AppCompatActivity {
         }
 
         nextbillionMap.addMarkers(markerOptionsList);
+        if (displayed.size() == 1) {
+            nextbillionMap.moveCamera(ai.nextbillion.maps.camera.CameraUpdateFactory.newLatLngZoom(displayed.get(0), 14));
+        } else if (displayed.size() > 1) {
+            ai.nextbillion.maps.geometry.LatLngBounds bounds = new ai.nextbillion.maps.geometry.LatLngBounds.Builder()
+                    .includes(displayed).build();
+            nextbillionMap.moveCamera(ai.nextbillion.maps.camera.CameraUpdateFactory.newLatLngBounds(bounds, 60));
+        }
     }
 
     private void resetMap() {
@@ -163,11 +178,15 @@ public class MarkersActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        destroyed = true;
+        if (loadLocationTask != null) loadLocationTask.cancel(true);
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+        progressDialog = null;
         mapView.onDestroy();
+        nextbillionMap = null;
+        super.onDestroy();
     }
 
     @Override
@@ -180,34 +199,30 @@ public class MarkersActivity extends AppCompatActivity {
 
         private WeakReference<MarkersActivity> activity;
         private int amount;
+        private final android.content.Context applicationContext;
 
         private LoadLocationTask(MarkersActivity activity, int amount) {
             this.amount = amount;
+            this.applicationContext = activity.getApplicationContext();
             this.activity = new WeakReference<>(activity);
         }
 
         @Override
         protected List<LatLng> doInBackground(Void... params) {
-            MarkersActivity activity = this.activity.get();
-            if (activity != null) {
-                String json = null;
-                try {
-                    json = GeoParseUtil.loadStringFromAssets(activity.getApplicationContext(), "points.geojson");
-                } catch (IOException exception) {
-                }
-
-                if (json != null) {
-                    return GeoParseUtil.parseGeoJsonCoordinates(json);
-                }
+            try {
+                String json = GeoParseUtil.loadStringFromResource(applicationContext, R.raw.test_points_utrecht);
+                if (!isCancelled()) return GeoParseUtil.parseGeoJsonCoordinates(json);
+            } catch (IOException exception) {
+                android.util.Log.e("MarkersActivity", "Unable to load bundled marker sample", exception);
             }
-            return null;
+            return java.util.Collections.emptyList();
         }
 
         @Override
         protected void onPostExecute(List<LatLng> locations) {
             super.onPostExecute(locations);
             MarkersActivity activity = this.activity.get();
-            if (activity != null) {
+            if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                 activity.onLatLngListLoaded(locations, amount);
             }
         }

@@ -49,7 +49,7 @@ public class CameraPositionActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(@NonNull final NextbillionMap map) {
         nextbillionMap = map;
-        map.setStyle(StyleConstants.LIGHT, style -> {
+        map.setStyle(StyleConstants.getBright(), style -> {
             // add a listener to FAB
             fab = findViewById(R.id.fab);
             fab.setColorFilter(ContextCompat.getColor(CameraPositionActivity.this, R.color.palette_mint_100));

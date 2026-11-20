@@ -23,9 +23,17 @@ public class GeoParseUtil {
         if (TextUtils.isEmpty(fileName)) {
             throw new NullPointerException("No GeoJSON File Name passed in.");
         }
-        InputStream is = context.getAssets().open(fileName);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-        return readAll(rd);
+        try (InputStream input = context.getAssets().open(fileName);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            return readAll(reader);
+        }
+    }
+
+    public static String loadStringFromResource(Context context, int resource) throws IOException {
+        try (InputStream input = context.getResources().openRawResource(resource);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            return readAll(reader);
+        }
     }
 
     public static List<LatLng> parseGeoJsonCoordinates(String geojsonStr) {

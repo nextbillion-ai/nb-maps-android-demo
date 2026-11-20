@@ -6,6 +6,7 @@ import ai.nextbillion.geocoding.rest.GeoCodingService;
 import ai.nextbillion.geocoding.rest.SearchResponse;
 import ai.nextbillion.maps.Nextbillion;
 import retrofit2.Callback;
+import retrofit2.Call;
 
 /**
  * @author qiuyu
@@ -13,8 +14,10 @@ import retrofit2.Callback;
  **/
 public class GeoCodingRequest {
 
-    public static void searchLocation(String query, Location location, Callback<SearchResponse> callback) {
+    public static Call<SearchResponse> searchLocation(String query, Location location, Callback<SearchResponse> callback) {
         String at = String.format("%s,%s", location.getLatitude(), location.getLongitude());
-        new GeoCodingService().getService().search(Nextbillion.getAccessKey(), query, at).enqueue(callback);
+        Call<SearchResponse> call = new GeoCodingService().getService().search(Nextbillion.getAccessKey(), query, at);
+        call.enqueue(callback);
+        return call;
     }
 }
