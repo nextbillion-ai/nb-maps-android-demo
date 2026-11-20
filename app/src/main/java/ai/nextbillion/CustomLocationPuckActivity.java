@@ -101,7 +101,7 @@ public class CustomLocationPuckActivity extends AppCompatActivity implements OnM
                 .tilt(0)
                 .build();
         nextbillionMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.LIGHT),
+        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.getBright()),
                 style -> activateLocationComponent(style));
     }
 

@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ai.nextbillion.maps.camera.CameraPosition;
-import ai.nextbillion.maps.core.MapView;
+import ai.nextbillion.view.DemoMapView;
 import ai.nextbillion.maps.core.NextbillionMap;
 import ai.nextbillion.maps.core.OnMapReadyCallback;
 import ai.nextbillion.maps.core.Style;
@@ -14,7 +14,7 @@ import ai.nextbillion.maps.geometry.LatLng;
 
 public class CustomMapViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private MapView mapView;
+    private DemoMapView mapView;
     private NextbillionMap mMap;
 
     private final LatLng cameraTargetPosition = new LatLng(53.550813508267716, 9.992248999933745);
@@ -34,7 +34,7 @@ public class CustomMapViewActivity extends AppCompatActivity implements OnMapRea
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setCompassImage(getResources().getDrawable(R.drawable.custom_user_puck_icon));
         mMap.getUiSettings().setLogoEnabled(true);
-        mMap.getUiSettings().setLogoResourceId(R.mipmap.map_log_1);
+        mapView.setLogoResourceId(R.mipmap.map_log_1);
         mMap.getUiSettings().setAttributionEnabled(true);
         mMap.getUiSettings().setAttributionTintColor(getResources().getColor(R.color.palette_mint_100));
     }

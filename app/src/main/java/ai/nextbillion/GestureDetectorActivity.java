@@ -69,7 +69,7 @@ public class GestureDetectorActivity extends AppCompatActivity {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(nextbillionMap -> {
             GestureDetectorActivity.this.nextbillionMap = nextbillionMap;
-            nextbillionMap.setStyle(StyleConstants.NBMAP_STREETS);
+            nextbillionMap.setStyle(StyleConstants.getBright());
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(22.70418008712976, 78.66264025041812))
                     .zoom(6)
@@ -408,19 +408,19 @@ public class GestureDetectorActivity extends AppCompatActivity {
 
             switch (alertType) {
                 case TYPE_NONE:
-                    color = android.R.color.black;
+                    color = android.content.res.Resources.getSystem().getColor(android.R.color.black, null);
                     break;
                 case TYPE_END:
-                    color = android.R.color.holo_red_dark;
+                    color = android.content.res.Resources.getSystem().getColor(android.R.color.holo_red_dark, null);
                     break;
                 case TYPE_OTHER:
-                    color = android.R.color.holo_purple;
+                    color = android.content.res.Resources.getSystem().getColor(android.R.color.holo_purple, null);
                     break;
                 case TYPE_PROGRESS:
-                    color = android.R.color.holo_orange_dark;
+                    color = android.content.res.Resources.getSystem().getColor(android.R.color.holo_orange_dark, null);
                     break;
                 case TYPE_START:
-                    color = android.R.color.holo_green_dark;
+                    color = android.content.res.Resources.getSystem().getColor(android.R.color.holo_green_dark, null);
                     break;
             }
         }

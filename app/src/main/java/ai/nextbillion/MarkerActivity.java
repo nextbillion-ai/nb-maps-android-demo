@@ -27,15 +27,24 @@ import ai.nextbillion.maps.style.sources.GeoJsonOptions;
 import ai.nextbillion.maps.utils.BitmapUtils;
 
 import java.util.List;
+import ai.nextbillion.utils.MapSymbol;
+import ai.nextbillion.maps.style.layers.Property;
 
-import ai.nextbillion.maps.plugins.annotation.Symbol;
-import ai.nextbillion.maps.plugins.annotation.SymbolManager;
-import ai.nextbillion.maps.plugins.annotation.SymbolOptions;
 
 public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;
     private NextbillionMap mMap;
+    private MapSymbol museumSymbol;
+    private boolean destroyed;
+    private boolean started;
+    private boolean locationUpdatesRequested;
+    private LocationEngine locationEngine;
+    private final LocationEngineCallback<LocationEngineResult> locationEngineListener =
+            new LocationEngineCallback<LocationEngineResult>() {
+                @Override public void onSuccess(LocationEngineResult result) { }
+                @Override public void onFailure(@NonNull Exception error) { }
+            };
     private ImageView ivBack;
 
     static final long DEFAULT_INTERVAL_MILLIS = 1000L;
@@ -54,10 +63,12 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(@NonNull NextbillionMap nextbillionMap) {
+        if (destroyed) return;
         mMap = nextbillionMap;
         mMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+                if (destroyed) return;
                 addMarker();
                 addSymbol(nextbillionMap, mapView, style);
             }
@@ -69,7 +80,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     ///////////////////////////////////////////////////////////////////////////
 
     private void addMarker() {
-        Marker marker = mMap.addMarker(new LatLng(37.98918461647387, 23.732742078407558));
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(37.98918461647387, 23.732742078407558)));
         mMap.removeMarker(marker);
         mMap.addMarker(new MarkerOptions().position(new LatLng(37.97179697861096, 23.72578634986554)).title("Acropolis of Athens"));
         mMap.addMarker(new MarkerOptions().position(new LatLng(37.96981055262356, 23.73306962989783)).snippet("Temple of Olympian Zeus"));
@@ -79,13 +90,10 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         style.addImage("SYMBOL_ICON",
                 BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.mipmap.museum_icon)),
                 false);
-        GeoJsonOptions options = new GeoJsonOptions().withTolerance(0.4f);
-        SymbolManager symbolManager = new SymbolManager(mapView, nextbillionMap, style, null, options);
-        SymbolOptions symbolOptions = new SymbolOptions()
-                .withLatLng(new LatLng(37.97644990303513, 23.740318392015276))
-                .withIconImage("SYMBOL_ICON")
-                .withTextField("Benaki Museum");
-        Symbol symbol = symbolManager.create(symbolOptions);
+        if (museumSymbol != null) museumSymbol.close();
+        museumSymbol = new MapSymbol(style, "museum-symbol",
+                new LatLng(37.97644990303513, 23.740318392015276),
+                "SYMBOL_ICON", 1f, Property.ICON_ANCHOR_CENTER, "Benaki Museum");
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -108,6 +116,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 @Override
                 public void onPermissionResult(boolean granted) {
+                    if (destroyed) return;
                     if (granted) {
                         fetchLocation();
                         mapView.getMapAsync(MarkerActivity.this);
@@ -120,33 +129,31 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-    private void fetchLocation(){
-        LocationEngine locationEngine = LocationEngineProvider.getBestLocationEngine(this);
-        LocationEngineRequest locationEngineRequest =
-                new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
-                        .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
-                        .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                        .build();
+    @android.annotation.SuppressLint("MissingPermission")
+    private void fetchLocation() {
+        if (destroyed || !started || locationUpdatesRequested
+                || !PermissionsManager.areLocationPermissionsGranted(this)) return;
+        if (locationEngine == null) {
+            locationEngine = LocationEngineProvider.getBestLocationEngine(getApplicationContext());
+        }
+        LocationEngineRequest request = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
+                .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
+                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY).build();
+        locationEngine.requestLocationUpdates(request, locationEngineListener, Looper.getMainLooper());
+        locationUpdatesRequested = true;
+    }
 
-         LocationEngineCallback<LocationEngineResult> locationEngineListener
-                = new LocationEngineCallback<LocationEngineResult>() {
-             @Override
-             public void onSuccess(LocationEngineResult result) {
-
-             }
-
-             @Override
-             public void onFailure(@NonNull Exception e) {
-
-             }
-         };
-         locationEngine.requestLocationUpdates(locationEngineRequest, locationEngineListener, Looper.getMainLooper());
+    private void stopLocationUpdates() {
+        if (locationEngine != null) locationEngine.removeLocationUpdates(locationEngineListener);
+        locationUpdatesRequested = false;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionsManager != null) {
+            permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
 
@@ -158,6 +165,8 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onStart() {
         super.onStart();
         mapView.onStart();
+        started = true;
+        fetchLocation();
     }
 
     @Override
@@ -174,8 +183,10 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     protected void onStop() {
-        super.onStop();
+        started = false;
+        stopLocationUpdates();
         mapView.onStop();
+        super.onStop();
     }
 
     @Override
@@ -186,8 +197,15 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        destroyed = true;
+        stopLocationUpdates();
+        if (museumSymbol != null) {
+            museumSymbol.close();
+            museumSymbol = null;
+        }
         mapView.onDestroy();
+        mMap = null;
+        super.onDestroy();
     }
 
     @Override

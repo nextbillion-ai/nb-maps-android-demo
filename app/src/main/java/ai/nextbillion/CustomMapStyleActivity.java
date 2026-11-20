@@ -72,7 +72,7 @@ public class CustomMapStyleActivity extends AppCompatActivity implements OnMapRe
 
     private void toggleMapStyle() {
         nextbillionMap.getStyle(style -> {
-            String styleUrl = StyleConstants.DARK.equals(style.getUri()) ? StyleConstants.LIGHT : StyleConstants.DARK;
+            String styleUrl = StyleConstants.getDark().equals(style.getUri()) ? StyleConstants.getBright() : StyleConstants.getDark();
             nextbillionMap.setStyle(new Style.Builder().fromUri(styleUrl));
         });
     }
@@ -93,7 +93,7 @@ public class CustomMapStyleActivity extends AppCompatActivity implements OnMapRe
                 .tilt(0)
                 .build();
         nextbillionMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.LIGHT),
+        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.getBright()),
                 style -> activateLocationComponent(style));
     }
 

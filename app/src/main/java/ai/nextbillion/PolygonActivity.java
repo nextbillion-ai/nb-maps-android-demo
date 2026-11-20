@@ -147,7 +147,7 @@ public class PolygonActivity extends AppCompatActivity implements View.OnClickLi
     private void onMapSync(NextbillionMap map) {
         mMap = map;
         addMapListener();
-        mMap.setStyle(new Style.Builder().fromUri(StyleConstants.LIGHT));
+        mMap.setStyle(new Style.Builder().fromUri(StyleConstants.getBright()));
     }
 
     private void addMapListener() {
@@ -174,7 +174,7 @@ public class PolygonActivity extends AppCompatActivity implements View.OnClickLi
                 if (clickMarker != null) {
                     mMap.removeMarker(clickMarker);
                 }
-                clickMarker = mMap.addMarker(latLng);
+                clickMarker = mMap.addMarker(new MarkerOptions().position(latLng));
                 Point clickPoint = new Point(latLng.getLongitude(),latLng.getLatitude());
                 List<Point> polygonLngLatPoints = new ArrayList<>();
                 for (LatLng point : polygonPoints) {

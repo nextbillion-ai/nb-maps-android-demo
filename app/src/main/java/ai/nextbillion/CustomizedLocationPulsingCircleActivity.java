@@ -112,7 +112,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
         this.nextbillionMap = nextbillionMap;
         nextbillionMap.animateCamera(CameraUpdateFactory.zoomBy(13));
 
-        nextbillionMap.setStyle(StyleConstants.LIGHT, style -> {
+        nextbillionMap.setStyle(StyleConstants.getBright(), style -> {
             locationComponent = nextbillionMap.getLocationComponent();
 
             LocationComponentOptions locationComponentOptions =

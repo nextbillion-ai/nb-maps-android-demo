@@ -58,9 +58,9 @@ public class HeatmapLayerActivity extends AppCompatActivity {
 
             try {
                 nextbillionMap.setStyle(new Style.Builder()
-                        .fromUri("https://api.nextbillion.io/maps/dark/style.json")
+                        .fromUri(StyleConstants.getDark())
                         .withSource(createEarthquakeSource())
-                        .withLayerAbove(createHeatmapLayer(), "waterway-bridge")
+                        .withLayer(createHeatmapLayer())
                         .withLayerBelow(createCircleLayer(), HEATMAP_LAYER_ID)
                 );
             } catch (URISyntaxException exception) {

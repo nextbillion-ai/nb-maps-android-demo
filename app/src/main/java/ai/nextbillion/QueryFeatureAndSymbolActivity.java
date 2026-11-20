@@ -89,7 +89,7 @@ public class QueryFeatureAndSymbolActivity extends AppCompatActivity {
             });
 
             nextbillionMap.setStyle(new Style.Builder()
-                            .fromUri(StyleConstants.NBMAP_STREETS)
+                            .fromUri(StyleConstants.getBright())
                             .withSource(source)
                             .withLayer(layer)
                     , style -> addSymbolLayer(style));

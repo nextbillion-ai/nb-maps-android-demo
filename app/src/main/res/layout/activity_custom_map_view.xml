@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".CustomMapViewActivity">
 
-    <ai.nextbillion.maps.core.MapView
+    <ai.nextbillion.view.DemoMapView
         android:id="@+id/custom_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

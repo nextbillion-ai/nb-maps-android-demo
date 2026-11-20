@@ -98,7 +98,7 @@ public class BasicLocationTrackingActivity extends AppCompatActivity implements 
                 .tilt(0)
                 .build();
         nextbillionMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.LIGHT), this::activateLocationComponent);
+        nextbillionMap.setStyle(new Style.Builder().fromUri(StyleConstants.getBright()), this::activateLocationComponent);
         trackLocation.setImageResource(R.drawable.ic_my_location);
     }
 

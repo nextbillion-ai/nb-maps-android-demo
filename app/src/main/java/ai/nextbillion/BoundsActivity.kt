@@ -1,5 +1,7 @@
 package ai.nextbillion
 
+import ai.nextbillion.maps.annotations.MarkerOptions
+
 import ai.nextbillion.databinding.ActivityBoundsBinding
 import ai.nextbillion.maps.annotations.PolygonOptions
 import ai.nextbillion.maps.camera.CameraUpdateFactory
@@ -42,6 +44,7 @@ class BoundsActivity : AppCompatActivity(){
 
     private fun removeBounds() {
         mMap.clear()
+        mMap.setLatLngBoundsForCameraTarget(null)
         boundsPoints.clear()
         boundsArea = null
         binding.removeBounds.hide()
@@ -53,11 +56,11 @@ class BoundsActivity : AppCompatActivity(){
             checkBounds(it)
             false
         }
-        map.setStyle( Style.Builder().fromUri(StyleConstants.LIGHT))
+        map.setStyle( Style.Builder().fromUri(StyleConstants.getBright()))
     }
 
     private fun checkBounds(latLng: LatLng) {
-        mMap.addMarker(latLng)
+        mMap.addMarker(MarkerOptions().position(latLng))
         boundsPoints.add(latLng)
 
         if (boundsPoints.size >= 4) {
